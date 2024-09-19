@@ -1,0 +1,208 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #423e3e;
+}
+
+.titleText {
+    text-shadow: black;
+    color: #f4f4f4;
+}
+
+/* Not floating  */
+.floating-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#outputTable thead tr {
+    position: sticky;
+    top: 0;
+    background-color: #fff; 
+    z-index: 1; 
+}
+
+#employeeTable thead tr {
+    position: sticky;
+    top: 0;
+    background-color: #fff; 
+    z-index: 1; 
+}
+
+
+
+/* Container for tables */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+/* Buttons */
+/* Upload input  */
+input[type="file"] {
+    position: absolute;
+    font-size: 13px;
+    color: #b8b8b8;
+  }
+
+::-webkit-file-upload-button{
+    background-color: #6d6d6d;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+
+::-webkit-file-upload-button:hover{
+    background-color: #0077ff;
+  }
+
+#clearButton {
+    background-color: #e40202;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+#clearButton:hover {
+    background-color: magenta;
+}
+
+/* Search container */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    margin: 0 5px;
+    padding: 5px;
+    font-size: 14px;
+    border: 2px solid black;
+}
+
+.search-container button {
+    background-color: #00aa00;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.search-container button:hover {
+    background-color: magenta;
+}
+
+#btn-export {
+    background-color: #00aa00;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 15px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+#btn-reload {
+    background-color: #00aa00;
+    border: none;
+    color: white;
+    padding: 15px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 15px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+#btn-export:hover {
+    background-color: #2eb2ff;
+}
+
+#btn-reload:hover {
+    background-color: #2eb2ff;
+}
+
+/* Table styles */
+.table-container {
+    overflow-x: auto;
+    max-height: 400px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+td {
+    background-color: #fafafa;
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    th, td {
+        padding: 6px;
+        font-size: 12px;
+    }
+}
