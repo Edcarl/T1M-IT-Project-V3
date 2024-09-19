@@ -56,12 +56,21 @@ body {
 /* Buttons */
 /* Upload input  */
 input[type="file"] {
-    position: absolute;
+    width: auto;
+    height: auto;
     font-size: 13px;
     color: #b8b8b8;
   }
 
+input[type="date"] {
+    width: auto;
+    height: auto;
+    color: #b8b8b8;
+  }
+
 ::-webkit-file-upload-button{
+    width: auto;
+    height: auto;
     background-color: #6d6d6d;
     border: none;
     color: white;
@@ -80,6 +89,8 @@ input[type="file"] {
   }
 
 #clearButton {
+    width: auto;
+    height: auto;
     background-color: #e40202;
     border: none;
     color: white;
@@ -99,12 +110,16 @@ input[type="file"] {
 
 /* Search container */
 .search-container {
+    width: auto;
+    height: auto;
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
 
 .search-container input {
+    width: auto;
+    height: auto;
     margin: 0 5px;
     padding: 5px;
     font-size: 14px;
@@ -112,6 +127,8 @@ input[type="file"] {
 }
 
 .search-container button {
+    width: auto;
+    height: auto;
     background-color: #00aa00;
     border: none;
     color: white;
