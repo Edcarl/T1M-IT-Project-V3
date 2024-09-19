@@ -144,7 +144,6 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const rowEmployeeId = cells[0].textContent.toLowerCase();
         const rowDate = new Date(cells[1].textContent.split('/').reverse().join('-'));
 
-        // timeOutInput is in the 4th cell (index 3)
         const timeOutInput = cells[3].querySelector('input');
         const timeOutValue = timeOutInput ? timeOutInput.value : '';
 
@@ -168,8 +167,6 @@ document.getElementById('searchButton').addEventListener('click', function() {
         }
     }
 });
-
-
 
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
