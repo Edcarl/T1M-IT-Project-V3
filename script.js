@@ -184,9 +184,6 @@ document.getElementById('searchButton').addEventListener('click', function() {
     }
 });
 
-
-
-
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
     const employeeId = document.getElementById('searchEmployeeId').value = '';
