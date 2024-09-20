@@ -7,13 +7,10 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-
         const employeeIdFilter = document.getElementById('employeeIdFilter');
         employeeIdFilter.innerHTML = '<option value="">Select Employee ID</option>';
-
         const tableBody = document.querySelector('#outputTable tbody');
         tableBody.innerHTML = '';
-
         const employeeData = {};
 
         rows.forEach((row, index) => {
@@ -26,11 +23,10 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                 if (!employeeData[employeeId]) {
                     employeeData[employeeId] = {};
                 }
-
+                
                 if (!employeeData[employeeId][dateString]) {
                     employeeData[employeeId][dateString] = [];
                 }
-
                 employeeData[employeeId][dateString].push(jsDate);
 
                 if (!employeeIdFilter.querySelector(`option[value="${employeeId}"]`)) {
@@ -133,7 +129,6 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
             }
         }
     };
-
     reader.readAsArrayBuffer(file);
 });
 
@@ -154,14 +149,12 @@ function filterTable() {
     }
 }
 
-
 document.getElementById('searchButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value.toLowerCase();
     const startDate = new Date(document.getElementById('searchStartDate').value.split('/').reverse().join('-'));
     const endDate = new Date(document.getElementById('searchEndDate').value.split('/').reverse().join('-'));
     const employeeTableBody = document.querySelector('#employeeTable tbody');
     employeeTableBody.innerHTML = '';
-
     const tableBody = document.querySelector('#outputTable tbody');
     const rows = tableBody.getElementsByTagName('tr');
 
@@ -219,15 +212,14 @@ document.getElementById('clearButton').addEventListener('click', function() {
 });
 
 // Function to convert Excel date to JavaScript date
-    function getJsDateFromExcel(excelDate) {
-        const excelEpoch = new Date(1899, 11, 30); // Excel epoch starts on December 30, 1899
-        const msPerDay = 86400000; // Number of milliseconds in a day
-        const jsDate = new Date(excelEpoch.getTime() + excelDate * msPerDay);
-        return jsDate;
-    }   
+function getJsDateFromExcel(excelDate) {
+    const excelEpoch = new Date(1899, 11, 30); 
+    const msPerDay = 86400000; 
+    const jsDate = new Date(excelEpoch.getTime() + excelDate * msPerDay);
+    return jsDate;
+}   
 
 document.getElementById('btn-export').addEventListener('click', function() {
-    // const table = document.getElementById('outputTable');
     const table = document.getElementById('employeeTable');
     const workbook = XLSX.utils.table_to_book(table, { sheet: 'Sheet1' });
     const fileInput = document.getElementById('fileInput');
