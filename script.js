@@ -146,13 +146,29 @@ document.getElementById('searchButton').addEventListener('click', function() {
 
         const timeOutInput = cells[3].querySelector('input');
         const timeOutValue = timeOutInput ? timeOutInput.value : '';
+        const timeInText = cells[2].textContent;
+
+        // Parse timeInText to a Date object
+        const timeInParts = timeInText.split(/[: ]/);
+        const timeInHours = parseInt(timeInParts[0], 10) + (timeInParts[2] === 'PM' && timeInParts[0] !== '12' ? 12 : 0);
+        const timeInMinutes = parseInt(timeInParts[1], 10);
+        const timeInDate = new Date(1970, 0, 1, timeInHours, timeInMinutes);
+        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour12: false });
+
+        // Format rowDate to a consistent format (e.g., dd/mm/yyyy)
+        const formattedRowDate = rowDate.toLocaleDateString('en-GB');
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
             (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate))) {
             const tr = document.createElement('tr');
             for (let j = 0; j < cells.length; j++) {
                 const td = document.createElement('td');
-                if (j === 3 && timeOutInput) {
+                
+                if (j === 1) {
+                    td.textContent = formattedRowDate;
+                } else if (j === 2 && timeInText) {
+                    td.textContent = timeInValue;
+                } else if (j === 3 && timeOutInput) {
                     // Convert timeOutInput value to text
                     td.textContent = timeOutValue;
                 } else if (cells[j].querySelector('input')) {
@@ -167,6 +183,9 @@ document.getElementById('searchButton').addEventListener('click', function() {
         }
     }
 });
+
+
+
 
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
