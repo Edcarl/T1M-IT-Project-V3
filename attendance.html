@@ -43,6 +43,9 @@
     <div class="container">
         <h2>Employee Attendance Details</h2>
         <div class="table-container">
+            <select id="employeeIdFilter" onchange="filterTable()">
+                <option value="">Select ID</option>
+            </select>
             <table id="outputTable" border="1">
                 <thead>
                     <tr>

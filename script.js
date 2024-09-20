@@ -8,10 +8,11 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
+        const employeeIdFilter = document.getElementById('employeeIdFilter');
+        employeeIdFilter.innerHTML = '<option value="">Select Employee ID</option>';
+
         const tableBody = document.querySelector('#outputTable tbody');
-        // const summaryBody = document.querySelector('#summaryTable tbody');
         tableBody.innerHTML = '';
-        // summaryBody.innerHTML = '';
 
         const employeeData = {};
 
@@ -31,6 +32,13 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                 }
 
                 employeeData[employeeId][dateString].push(jsDate);
+
+                if (!employeeIdFilter.querySelector(`option[value="${employeeId}"]`)) {
+                    const option = document.createElement('option');
+                    option.value = employeeId;
+                    option.textContent = employeeId;
+                    employeeIdFilter.appendChild(option);
+                }
             }
         });
 
@@ -128,6 +136,24 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 
     reader.readAsArrayBuffer(file);
 });
+
+function filterTable() {
+    const selectedEmployeeId = document.getElementById('employeeIdFilter').value;
+    const table = document.getElementById('outputTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+        const cells = rows[i].getElementsByTagName('td');
+        const employeeId = cells[0].textContent;
+
+        if (selectedEmployeeId === "" || employeeId === selectedEmployeeId) {
+            rows[i].style.display = ""; // Show the row
+        } else {
+            rows[i].style.display = "none"; // Hide the row
+        }
+    }
+}
+
 
 document.getElementById('searchButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value.toLowerCase();
