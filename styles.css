@@ -148,6 +148,7 @@ input[type="date"] {
 
 /* Style for the select dropdown */
 #employeeIdFilter {
+    position: sticky;
     width: auto; 
     padding: 10px; 
     border: 1px solid #ccc;

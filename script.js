@@ -8,7 +8,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
         const employeeIdFilter = document.getElementById('employeeIdFilter');
-        employeeIdFilter.innerHTML = '<option value="">Select Employee ID</option>';
+        employeeIdFilter.innerHTML = '<option value="">Select All</option>';
         const tableBody = document.querySelector('#outputTable tbody');
         tableBody.innerHTML = '';
         const employeeData = {};
@@ -23,12 +23,11 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                 if (!employeeData[employeeId]) {
                     employeeData[employeeId] = {};
                 }
-                
                 if (!employeeData[employeeId][dateString]) {
                     employeeData[employeeId][dateString] = [];
                 }
                 employeeData[employeeId][dateString].push(jsDate);
-
+                
                 if (!employeeIdFilter.querySelector(`option[value="${employeeId}"]`)) {
                     const option = document.createElement('option');
                     option.value = employeeId;
