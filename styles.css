@@ -183,6 +183,24 @@ input[type="date"] {
     background-color: #fff;
 }
 
+#dateFilter {
+    position: sticky;
+    width: auto; 
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    background-color: #f9f9f9;
+    font-size: auto; 
+    color: #333; 
+    outline: none; 
+    transition: border-color 0.3s ease; 
+}
+
+#dateFilter:focus {
+    border-color: #007bff;
+    background-color: #fff;
+}
+
 #btn-export {
     background-color: #00aa00;
     border: none;

@@ -8,8 +8,8 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
         const employeeIdFilter = document.getElementById('employeeIdFilter');
-        employeeIdFilter.innerHTML = '<option value="">Select All</option>';
         const statusFilter = document.getElementById('statusFilter');
+        employeeIdFilter.innerHTML = '<option value="">Select All</option>';
         statusFilter.innerHTML = '<option value="">Select Status</option>';
         const tableBody = document.querySelector('#outputTable tbody');
         tableBody.innerHTML = '';
@@ -143,6 +143,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 function filterTable() {
     const selectedEmployeeId = document.getElementById('employeeIdFilter').value;
     const selectedStatus = document.getElementById('statusFilter').value;
+    const selectedDate = document.getElementById('dateFilter').value;
     const table = document.getElementById('outputTable');
     const rows = table.getElementsByTagName('tr');
 
@@ -150,9 +151,10 @@ function filterTable() {
         const cells = rows[i].getElementsByTagName('td');
         const employeeId = cells[0].textContent;
         const status = cells[5].textContent;
-
+        const filterDate = cells[1].textContent;
         if ((selectedEmployeeId === "" || employeeId === selectedEmployeeId) &&
-            (selectedStatus === "" || status === selectedStatus)) {
+            (selectedStatus === "" || status === selectedStatus) && 
+            (selectedDate === "" || filterDate === new Date(selectedDate).toLocaleDateString('en-GB'))) {
             rows[i].style.display = ""; // Show the row
         } else {
             rows[i].style.display = "none"; // Hide the row
