@@ -9,6 +9,8 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
         const employeeIdFilter = document.getElementById('employeeIdFilter');
         employeeIdFilter.innerHTML = '<option value="">Select All</option>';
+        const statusFilter = document.getElementById('statusFilter');
+        statusFilter.innerHTML = '<option value="">Select Status</option>';
         const tableBody = document.querySelector('#outputTable tbody');
         tableBody.innerHTML = '';
         const employeeData = {};
@@ -86,6 +88,13 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                             status = "Regular time";
                         }
                         statusCell.textContent = status;
+
+                        if (!statusFilter.querySelector(`option[value="${status}"]`)) {
+                            const option = document.createElement('option');
+                            option.value = status;
+                            option.textContent = status;
+                            statusFilter.appendChild(option);
+                        }
                     } else {
                         totalHoursCell.textContent = "N/A";
                         statusCell.textContent = "Didn't clock out";
@@ -133,20 +142,41 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 
 function filterTable() {
     const selectedEmployeeId = document.getElementById('employeeIdFilter').value;
+    const selectedStatus = document.getElementById('statusFilter').value;
     const table = document.getElementById('outputTable');
     const rows = table.getElementsByTagName('tr');
 
-    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+    for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName('td');
         const employeeId = cells[0].textContent;
+        const status = cells[5].textContent;
 
-        if (selectedEmployeeId === "" || employeeId === selectedEmployeeId) {
+        if ((selectedEmployeeId === "" || employeeId === selectedEmployeeId) &&
+            (selectedStatus === "" || status === selectedStatus)) {
             rows[i].style.display = ""; // Show the row
         } else {
             rows[i].style.display = "none"; // Hide the row
         }
     }
 }
+
+
+// function statusfilterTable() {
+//     const selectedStatus = document.getElementById('statusFilter').value;
+//     const table = document.getElementById('outputTable');
+//     const rows = table.getElementsByTagName('tr');
+
+//     for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+//         const cells = rows[i].getElementsByTagName('td');
+//         const status = cells[5].textContent;
+
+//         if (selectedStatus === "" || status === selectedStatus) {
+//             rows[i].style.display = ""; // Show the row
+//         } else {
+//             rows[i].style.display = "none"; // Hide the row
+//         }
+//     }
+// }
 
 document.getElementById('searchButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value.toLowerCase();
@@ -173,7 +203,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const timeInDate = new Date(1970, 0, 1, timeInHours, timeInMinutes);
         const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour12: false });
 
-        // Format rowDate to a consistent format (e.g., dd/mm/yyyy)
+        // Format rowDate format (dd/mm/yyyy)
         const formattedRowDate = rowDate.toLocaleDateString('en-GB');
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
