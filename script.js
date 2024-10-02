@@ -155,9 +155,9 @@ function filterTable() {
         if ((selectedEmployeeId === "" || employeeId === selectedEmployeeId) &&
             (selectedStatus === "" || status === selectedStatus) && 
             (selectedDate === "" || filterDate === new Date(selectedDate).toLocaleDateString('en-GB'))) {
-            rows[i].style.display = ""; // Show the row
+            rows[i].style.display = "";
         } else {
-            rows[i].style.display = "none"; // Hide the row
+            rows[i].style.display = "none";
         }
     }
 }
@@ -166,7 +166,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value.toLowerCase();
     const startDate = new Date(document.getElementById('searchStartDate').value.split('/').reverse().join('-'));
     const endDate = new Date(document.getElementById('searchEndDate').value.split('/').reverse().join('-'));
-    const searchTimeIn = document.getElementById('timeInSearch').value.toLowerCase();
+    const searchTimeIn = document.getElementById('timeInSearch').value.trim();
     const employeeTableBody = document.querySelector('#employeeTable tbody');
     employeeTableBody.innerHTML = '';
     const tableBody = document.querySelector('#outputTable tbody');
@@ -191,9 +191,24 @@ document.getElementById('searchButton').addEventListener('click', function() {
         // Format rowDate format (dd/mm/yyyy)
         const formattedRowDate = rowDate.toLocaleDateString('en-GB');
 
+        // Determine if the search input is for hours or hours and minutes
+        const colonIndex = searchTimeIn.indexOf(':');
+        let matchesTime = false;
+
+        if (colonIndex === -1) {
+            // Search by hour only
+            matchesTime = timeInHours === parseInt(searchTimeIn, 10);
+        } else {
+            // Search by hour and minute
+            const [searchHours, searchMinutes] = searchTimeIn.split(':').map(Number);
+            matchesTime = timeInHours === searchHours && timeInMinutes === searchMinutes;
+        }
+
+        console.log(`Row ${i}: Time In = ${timeInText}, Matches Time = ${matchesTime}`);
+
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
             (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate)) &&
-            (searchTimeIn === '' || timeInText.toLowerCase().includes(searchTimeIn))) {
+            (searchTimeIn === '' || matchesTime)) {
             const tr = document.createElement('tr');
             for (let j = 0; j < cells.length; j++) {
                 const td = document.createElement('td');
@@ -219,6 +234,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
         }
     }
 });
+
 
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
