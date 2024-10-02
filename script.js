@@ -162,28 +162,11 @@ function filterTable() {
     }
 }
 
-
-// function statusfilterTable() {
-//     const selectedStatus = document.getElementById('statusFilter').value;
-//     const table = document.getElementById('outputTable');
-//     const rows = table.getElementsByTagName('tr');
-
-//     for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
-//         const cells = rows[i].getElementsByTagName('td');
-//         const status = cells[5].textContent;
-
-//         if (selectedStatus === "" || status === selectedStatus) {
-//             rows[i].style.display = ""; // Show the row
-//         } else {
-//             rows[i].style.display = "none"; // Hide the row
-//         }
-//     }
-// }
-
 document.getElementById('searchButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value.toLowerCase();
     const startDate = new Date(document.getElementById('searchStartDate').value.split('/').reverse().join('-'));
     const endDate = new Date(document.getElementById('searchEndDate').value.split('/').reverse().join('-'));
+    const searchTimeIn = document.getElementById('timeInSearch').value.toLowerCase();
     const employeeTableBody = document.querySelector('#employeeTable tbody');
     employeeTableBody.innerHTML = '';
     const tableBody = document.querySelector('#outputTable tbody');
@@ -203,13 +186,14 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const timeInHours = parseInt(timeInParts[0], 10) + (timeInParts[2] === 'PM' && timeInParts[0] !== '12' ? 12 : 0);
         const timeInMinutes = parseInt(timeInParts[1], 10);
         const timeInDate = new Date(1970, 0, 1, timeInHours, timeInMinutes);
-        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour12: false });
+        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
         // Format rowDate format (dd/mm/yyyy)
         const formattedRowDate = rowDate.toLocaleDateString('en-GB');
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
-            (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate))) {
+            (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate)) &&
+            (searchTimeIn === '' || timeInText.toLowerCase().includes(searchTimeIn))) {
             const tr = document.createElement('tr');
             for (let j = 0; j < cells.length; j++) {
                 const td = document.createElement('td');
@@ -219,8 +203,10 @@ document.getElementById('searchButton').addEventListener('click', function() {
                 } else if (j === 2 && timeInText) {
                     td.textContent = timeInValue;
                 } else if (j === 3 && timeOutInput) {
-                    // Convert timeOutInput value to text
-                    td.textContent = timeOutValue;
+                    // Convert timeOutInput value to text and format without seconds
+                    const timeOutParts = timeOutValue.split(':');
+                    const formattedTimeOut = `${timeOutParts[0]}:${timeOutParts[1]}`;
+                    td.textContent = formattedTimeOut;
                 } else if (cells[j].querySelector('input')) {
                     const input = cells[j].querySelector('input');
                     td.appendChild(input.cloneNode(true));
@@ -239,6 +225,7 @@ document.getElementById('clearButton').addEventListener('click', function() {
     const employeeId = document.getElementById('searchEmployeeId').value = '';
     const startDate = document.getElementById('searchStartDate').value = '';
     const endDate = document.getElementById('searchEndDate').value = '';
+    const searchTimeIn = document.getElementById('timeInSearch').value = '';
     employeeTableBody.innerHTML = '';
 });
 
@@ -258,7 +245,7 @@ document.getElementById('btn-export').addEventListener('click', function() {
     // Get today's date
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
     const yyyy = today.getFullYear();
 
     const todayDate = yyyy + '-' + mm + '-' + dd;
