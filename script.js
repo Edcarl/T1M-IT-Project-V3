@@ -65,40 +65,43 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                     timeOutInput.value = timestamps.length > 1 ? timeOut.toLocaleTimeString('en-US', { hour12: false }) : '';
                     timeOutCell.appendChild(timeOutInput);
 
-                const updateTotalHours = () => {
-                    const timeOutValue = timeOutInput.value;
-                    if (timeOutValue) {
-                        const [hours, minutes] = timeOutValue.split(':');
-                        timeOut.setHours(hours, minutes);
+                    const allowedStatuses = ["Regular time", "Under time", "Over time", "Didn't clock out"];
 
-                        const totalHours = ((timeOut - timeIn) / (1000 * 60 * 60)).toFixed(2); // Calculate total hours
-                        const totalMins = ((timeOut - timeIn) / (1000 * 60)).toFixed(2);
-                        totalHoursCell.textContent = totalHours;
-
-                        let status;
-                        if (totalHours-1 < 7.5 && totalHours-1 > 0) {
-                            let deficit = Math.round(480 - totalMins+60);
-                            status = "Under time: " + deficit + " mins";
-                        } else if (totalHours-1 > 8.5) {
-                            let OT = Math.round(totalHours-1 - 8);
-                            status = "Over time: " + OT + " hour/s";
-                        } else if (totalHours <= 0) {
-                            status = "Didn't clock out";
+                    const updateTotalHours = () => {
+                        const timeOutValue = timeOutInput.value;
+                        if (timeOutValue) {
+                            const [hours, minutes] = timeOutValue.split(':');
+                            timeOut.setHours(hours, minutes);
+                    
+                            const totalHours = ((timeOut - timeIn) / (1000 * 60 * 60)).toFixed(2); // Calculate total hours
+                            const totalMins = ((timeOut - timeIn) / (1000 * 60)).toFixed(2);
+                            totalHoursCell.textContent = totalHours;
+                    
+                            let status;
+                            if (totalHours-1 < 7.5 && totalHours-1 > 0) {
+                                let deficit = Math.round(480 - totalMins + 60);
+                                status = `Under time: ${deficit} mins`;
+                            } else if (totalHours-1 > 8.5) {
+                                let OT = Math.round(totalHours-1 - 8);
+                                status = `Over time: ${OT} hour/s`;
+                            } else if (totalHours <= 0) {
+                                status = "Didn't clock out";
+                            } else {
+                                status = "Regular time";
+                            }
+                            statusCell.textContent = status;
+                    
+                            const filteredStatus = allowedStatuses.find(allowedStatus => status.includes(allowedStatus));
+                            if (filteredStatus && !statusFilter.querySelector(`option[value="${filteredStatus}"]`)) {
+                                const option = document.createElement('option');
+                                option.value = filteredStatus;
+                                option.textContent = filteredStatus;
+                                statusFilter.appendChild(option);
+                            }
                         } else {
-                            status = "Regular time";
+                            totalHoursCell.textContent = "N/A";
+                            statusCell.textContent = "Didn't clock out";
                         }
-                        statusCell.textContent = status;
-
-                        if (!statusFilter.querySelector(`option[value="${status}"]`)) {
-                            const option = document.createElement('option');
-                            option.value = status;
-                            option.textContent = status;
-                            statusFilter.appendChild(option);
-                        }
-                    } else {
-                        totalHoursCell.textContent = "N/A";
-                        statusCell.textContent = "Didn't clock out";
-                    }
 
                     const scheduledTimeIn = new Date(timeIn);
                     scheduledTimeIn.setHours(8, 30, 0, 0); // Set to 8:30 AM
@@ -152,8 +155,9 @@ function filterTable() {
         const employeeId = cells[0].textContent;
         const status = cells[5].textContent;
         const filterDate = cells[1].textContent;
+
         if ((selectedEmployeeId === "" || employeeId === selectedEmployeeId) &&
-            (selectedStatus === "" || status === selectedStatus) && 
+            (selectedStatus === "" || status.includes(selectedStatus)) && 
             (selectedDate === "" || filterDate === new Date(selectedDate).toLocaleDateString('en-GB'))) {
             rows[i].style.display = "";
         } else {
