@@ -67,6 +67,26 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 
                     const allowedStatuses = ["Regular time", "Under time", "Over time", "Didn't clock out"];
 
+                    const scheduledTimeIn = new Date(timeIn);
+                    scheduledTimeIn.setHours(8, 30, 0, 0); // Set to 8:30 AM
+
+                    let lateness = 0;
+                    if (timeIn > scheduledTimeIn) {
+                        lateness = (timeIn - scheduledTimeIn) / (1000 * 60); // in minutes
+                    }
+
+                    const hoursLate = Math.floor(lateness / 60);
+                    const minutesLate = Math.floor(lateness % 60);
+
+                    if (hoursLate === 0 && minutesLate === 0) {
+                        lateCell.textContent = 'NA';
+                    } else if (hoursLate === 0) {
+                        lateCell.textContent = `${minutesLate} min/s late`;
+                    }
+                    else {
+                        lateCell.textContent = `${hoursLate}hr/s and ${minutesLate}min/s`;
+                    }
+
                     const updateTotalHours = () => {
                         const timeOutValue = timeOutInput.value;
                         if (timeOutValue) {
@@ -102,26 +122,6 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                             totalHoursCell.textContent = "N/A";
                             statusCell.textContent = "Didn't clock out";
                         }
-
-                    const scheduledTimeIn = new Date(timeIn);
-                    scheduledTimeIn.setHours(8, 30, 0, 0); // Set to 8:30 AM
-
-                    let lateness = 0;
-                    if (timeIn > scheduledTimeIn) {
-                        lateness = (timeIn - scheduledTimeIn) / (1000 * 60); // in minutes
-                    }
-
-                    const hoursLate = Math.floor(lateness / 60);
-                    const minutesLate = Math.floor(lateness % 60);
-
-                    if (hoursLate === 0 && minutesLate === 0) {
-                        lateCell.textContent = 'NA';
-                    } else if (hoursLate === 0) {
-                        lateCell.textContent = `${minutesLate} min/s late`;
-                    }
-                    else {
-                        lateCell.textContent = `${hoursLate}hr/s and ${minutesLate}min/s`;
-                    }
                     
                 };
 
