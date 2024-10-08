@@ -9,8 +9,8 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
         const employeeIdFilter = document.getElementById('employeeIdFilter');
         const statusFilter = document.getElementById('statusFilter');
-        employeeIdFilter.innerHTML = '<option value="">Select All</option>';
-        statusFilter.innerHTML = '<option value="">Select Status</option>';
+        employeeIdFilter.innerHTML = '<option value="">All ID</option>';
+        statusFilter.innerHTML = '<option value="">All Status</option>';
         const tableBody = document.querySelector('#outputTable tbody');
         tableBody.innerHTML = '';
         const employeeData = {};
@@ -65,12 +65,12 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                     timeOutInput.value = timestamps.length > 1 ? timeOut.toLocaleTimeString('en-US', { hour12: false }) : '';
                     timeOutCell.appendChild(timeOutInput);
 
-                    const allowedStatuses = ["Regular time", "Under time", "Over time", "Didn't clock out"];
-
+                    const allowedStatuses = ["Regular time", "Under time", "Over time", "Didn't clock out", "Late"];
                     const scheduledTimeIn = new Date(timeIn);
                     scheduledTimeIn.setHours(8, 30, 0, 0); // Set to 8:30 AM
 
                     let lateness = 0;
+                    let status;
                     if (timeIn > scheduledTimeIn) {
                         lateness = (timeIn - scheduledTimeIn) / (1000 * 60); // in minutes
                     }
@@ -82,9 +82,11 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                         lateCell.textContent = 'NA';
                     } else if (hoursLate === 0) {
                         lateCell.textContent = `${minutesLate} min/s late`;
+                        status = "Late";
                     }
                     else {
                         lateCell.textContent = `${hoursLate}hr/s and ${minutesLate}min/s`;
+                        status = "Late";
                     }
 
                     const updateTotalHours = () => {
@@ -97,7 +99,6 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                             const totalMins = ((timeOut - timeIn) / (1000 * 60)).toFixed(2);
                             totalHoursCell.textContent = totalHours;
                     
-                            let status;
                             if (totalHours-1 < 7.5 && totalHours-1 > 0) {
                                 let deficit = Math.round(480 - totalMins + 60);
                                 status = `Under time: ${deficit} mins`;
@@ -122,7 +123,6 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                             totalHoursCell.textContent = "N/A";
                             statusCell.textContent = "Didn't clock out";
                         }
-                    
                 };
 
                 timeOutInput.addEventListener('change', updateTotalHours);
@@ -190,9 +190,9 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const timeInHours = parseInt(timeInParts[0], 10) + (timeInParts[2] === 'PM' && timeInParts[0] !== '12' ? 12 : 0);
         const timeInMinutes = parseInt(timeInParts[1], 10);
         const timeInDate = new Date(1970, 0, 1, timeInHours, timeInMinutes);
-        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-        // Format rowDate format (dd/mm/yyyy)
+        // rowDate format (dd/mm/yyyy)
         const formattedRowDate = rowDate.toLocaleDateString('en-GB');
 
         // Determine if the search input is for hours or hours and minutes
@@ -200,15 +200,13 @@ document.getElementById('searchButton').addEventListener('click', function() {
         let matchesTime = false;
 
         if (colonIndex === -1) {
-            // Search by hour only
             matchesTime = timeInHours === parseInt(searchTimeIn, 10);
         } else {
-            // Search by hour and minute
             const [searchHours, searchMinutes] = searchTimeIn.split(':').map(Number);
             matchesTime = timeInHours === searchHours && timeInMinutes === searchMinutes;
         }
 
-        console.log(`Row ${i}: Time In = ${timeInText}, Matches Time = ${matchesTime}`);
+        // console.log(`Row ${i}: Time In = ${timeInText}, Matches Time = ${matchesTime}`);
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
             (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate)) &&
@@ -239,7 +237,6 @@ document.getElementById('searchButton').addEventListener('click', function() {
     }
 });
 
-
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
     const employeeId = document.getElementById('searchEmployeeId').value = '';
@@ -249,7 +246,7 @@ document.getElementById('clearButton').addEventListener('click', function() {
     employeeTableBody.innerHTML = '';
 });
 
-// Function to convert Excel date to JavaScript date
+// to convert Excel date to JavaScript date
 function getJsDateFromExcel(excelDate) {
     const excelEpoch = new Date(1899, 11, 30); 
     const msPerDay = 86400000; 
