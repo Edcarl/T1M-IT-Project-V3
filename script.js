@@ -193,7 +193,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
         // rowDate format (dd/mm/yyyy)
-        const formattedRowDate = rowDate.toLocaleDateString('en-GB');
+        const formattedRowDate = rowDate.toLocaleDateString('en-US');
 
         // Determine if the search input is for hours or hours and minutes
         const colonIndex = searchTimeIn.indexOf(':');
