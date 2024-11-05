@@ -52,9 +52,9 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                     const dateCell = document.createElement('td');
                     const timeInCell = document.createElement('td');
                     const timeOutCell = document.createElement('td');
+                    const lateCell = document.createElement('td');
                     const totalHoursCell = document.createElement('td');
                     const statusCell = document.createElement('td');
-                    const lateCell = document.createElement('td');
 
                     employeeIdCell.textContent = employeeId;
                     dateCell.textContent = date;
@@ -67,7 +67,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 
                     const allowedStatuses = ["Regular time", "Under time", "Over time", "Didn't clock out", "Late"];
                     const scheduledTimeIn = new Date(timeIn);
-                    scheduledTimeIn.setHours(8, 30, 0, 0); // Set to 8:30 AM
+                    scheduledTimeIn.setHours(8, 30, 0, 0);
 
                     let lateness = 0;
                     let status;
@@ -132,9 +132,9 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                 tr.appendChild(dateCell);
                 tr.appendChild(timeInCell);
                 tr.appendChild(timeOutCell);
+                tr.appendChild(lateCell);
                 tr.appendChild(totalHoursCell);
                 tr.appendChild(statusCell);
-                tr.appendChild(lateCell);
 
                 tableBody.appendChild(tr);
             }
