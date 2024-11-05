@@ -171,6 +171,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
     const startDate = new Date(document.getElementById('searchStartDate').value.split('/').reverse().join('-'));
     const endDate = new Date(document.getElementById('searchEndDate').value.split('/').reverse().join('-'));
     const searchTimeIn = document.getElementById('timeInSearch').value.trim();
+    const searchTimeInRange = document.getElementById('timeInRange').value.trim();
     const employeeTableBody = document.querySelector('#employeeTable tbody');
     employeeTableBody.innerHTML = '';
     const tableBody = document.querySelector('#outputTable tbody');
@@ -189,23 +190,24 @@ document.getElementById('searchButton').addEventListener('click', function() {
         const timeInParts = timeInText.split(/[: ]/);
         const timeInHours = parseInt(timeInParts[0], 10) + (timeInParts[2] === 'PM' && timeInParts[0] !== '12' ? 12 : 0);
         const timeInMinutes = parseInt(timeInParts[1], 10);
-        const timeInDate = new Date(1970, 0, 1, timeInHours, timeInMinutes);
-        const timeInValue = timeInDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        const rowTime = new Date(1970, 0, 1, timeInHours, timeInMinutes);
 
         // rowDate format (dd/mm/yyyy)
         const formattedRowDate = rowDate.toLocaleDateString('en-US');
 
-        // Determine if the search input is for hours or hours and minutes
-        const colonIndex = searchTimeIn.indexOf(':');
+        // Parse search times
+        const [searchStartHours, searchStartMinutes = 0] = searchTimeIn.split(':').map(Number); 
+        const [searchEndHours, searchEndMinutes = 0] = searchTimeInRange.split(':').map(Number); 
+
+        const searchStartTime = new Date(1970, 0, 1, searchStartHours, searchStartMinutes);
+        const searchEndTime = new Date(1970, 0, 1, searchEndHours, searchEndMinutes);
+
         let matchesTime = false;
-
-        if (colonIndex === -1) {
-            matchesTime = timeInHours === parseInt(searchTimeIn, 10);
+        if (searchTimeIn && searchTimeInRange) {
+            matchesTime = rowTime >= searchStartTime && rowTime <= searchEndTime;
         } else {
-            const [searchHours, searchMinutes] = searchTimeIn.split(':').map(Number);
-            matchesTime = timeInHours === searchHours && timeInMinutes === searchMinutes;
+            matchesTime = true;
         }
-
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
             (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate)) &&
@@ -217,7 +219,7 @@ document.getElementById('searchButton').addEventListener('click', function() {
                 if (j === 1) {
                     td.textContent = formattedRowDate;
                 } else if (j === 2 && timeInText) {
-                    td.textContent = timeInValue;
+                    td.textContent = timeInText;
                 } else if (j === 3 && timeOutInput) {
                     // Convert timeOutInput value to text and format without seconds
                     const timeOutParts = timeOutValue.split(':');
@@ -236,12 +238,14 @@ document.getElementById('searchButton').addEventListener('click', function() {
     }
 });
 
+
 document.getElementById('clearButton').addEventListener('click', function() {
     const employeeTableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
     const employeeId = document.getElementById('searchEmployeeId').value = '';
     const startDate = document.getElementById('searchStartDate').value = '';
     const endDate = document.getElementById('searchEndDate').value = '';
     const searchTimeIn = document.getElementById('timeInSearch').value = '';
+    const searchTimeInRange = document.getElementById('timeInRange').value = '';
     employeeTableBody.innerHTML = '';
 });
 
