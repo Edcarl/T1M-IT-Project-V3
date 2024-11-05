@@ -16,7 +16,6 @@ body {
     color: #f4f4f4;
 }
 
-/* Not floating  */
 .floating-container {
     width: 90%;
     max-width: 1200px;
@@ -144,7 +143,7 @@ input[type="date"] {
     background-color: magenta;
 }
 
-/* Style for the select dropdown */
+/*select dropdown */
 #employeeIdFilter {
     position: sticky;
     width: auto; 

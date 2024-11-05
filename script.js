@@ -206,7 +206,6 @@ document.getElementById('searchButton').addEventListener('click', function() {
             matchesTime = timeInHours === searchHours && timeInMinutes === searchMinutes;
         }
 
-        // console.log(`Row ${i}: Time In = ${timeInText}, Matches Time = ${matchesTime}`);
 
         if ((employeeId === '' || rowEmployeeId.includes(employeeId)) &&
             (isNaN(startDate) || isNaN(endDate) || (rowDate >= startDate && rowDate <= endDate)) &&
